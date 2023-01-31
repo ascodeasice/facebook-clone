@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require("express-session");
 require("dotenv").config();
 
 var indexRouter = require('./routes/index');
@@ -29,6 +30,60 @@ main().catch(err => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
 }
+
+// SECTION configures facebook strategy
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook');
+const User = require("./models/User");
+
+passport.use(new FacebookStrategy({
+  clientID: process.env['FACEBOOK_APP_ID'],
+  clientSecret: process.env['FACEBOOK_APP_SECRET'],
+  callbackURL: process.env['FACEBOOK_CALLBACK_URL'],
+  profileFields: ['displayName', 'photos']
+},
+  function (accessToken, refreshToken, profile, cb) {
+    User.findOne({ facebookId: profile.id })
+      .exec((err, user) => {
+        if (err) {
+          return cb(err);
+        }
+        if (user == null) {
+          // create a user
+          const newUser = new User({
+            username: profile.displayName,
+            facebookId: profile.id,
+            friends: [],
+            bio: "",
+            profilePictureURL: profile.photos ? profile.photos[0].value : "",
+          });
+
+          newUser.save((err) => {
+            if (err) {
+              return cb(err);
+            }
+          });
+          return cb(null, newUser);
+        }
+        // user exists
+        return cb(null, user);
+      })
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
