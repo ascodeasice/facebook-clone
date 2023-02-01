@@ -4,6 +4,8 @@ const passport = require("passport");
 const User = require('../models/User');
 const jwt = require("jsonwebtoken");
 const authController = require("../controllers/authController");
+const userController = require('../controllers/userController');
+const { verifyToken } = require("../jwt/verify");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -16,5 +18,7 @@ router.get('/oauth2/facebook/callback',
   passport.authenticate('facebook', { failureMessage: true }),
   authController.logIn
 );
+
+router.get('/users/:userId', verifyToken, userController.getUser);
 
 module.exports = router;
