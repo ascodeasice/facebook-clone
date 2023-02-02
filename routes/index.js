@@ -1,24 +1,25 @@
 var express = require('express');
 var router = express.Router();
 const passport = require("passport");
-const User = require('../models/User');
-const jwt = require("jsonwebtoken");
 const authController = require("../controllers/authController");
-const userController = require('../controllers/userController');
-const { verifyToken } = require("../jwt/verify");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', {
+    title: 'Express',
+    user: res.locals.currentUser,
+  });
 });
 
 router.get('/login/facebook', passport.authenticate('facebook'));
 
+// log in callback
 router.get('/oauth2/facebook/callback',
-  passport.authenticate('facebook', { failureMessage: true }),
+  passport.authenticate('facebook',
+    { failureMessage: true, failureRedirect: "/login/facebook" }),
   authController.logIn
 );
 
-router.get('/users/:userId', verifyToken, userController.getUser);
+router.post('/logout/facebook', authController.logOut);
 
 module.exports = router;

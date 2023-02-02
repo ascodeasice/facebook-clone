@@ -4,3 +4,7 @@ block content
   h1= title
   p Welcome to #{title}
   a(href="/login/facebook" class="button") Log In With Facebook
+  if user
+    form(action="/logout/facebook" method="POST")
+      input(type="hidden" name="accessToken" value=user.accessToken)
+      button(type="submit") Log out
