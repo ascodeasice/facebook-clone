@@ -1,10 +1,6 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  a(href="/login/facebook" class="button") Log In With Facebook
-  if user
-    form(action="/logout/facebook" method="POST")
-      input(type="hidden" name="accessToken" value=user.accessToken)
-      button(type="submit") Log out
+  form(action="/logout/facebook" method="POST")
+    input(type="hidden" name="accessToken" value=user.accessToken)
+    button(type="submit" class='bg-blue-600 text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold') Log out
