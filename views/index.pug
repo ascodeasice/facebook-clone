@@ -2,13 +2,30 @@ extends layout
 
 block content
   div(class='grid justify-center')
-    div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-fit rounded-md mt-4')
+    div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-full rounded-md mt-4')
       a(href=`/users/${user._id}`)
-        img(src=user.profilePictureURL alt="Profile picture" class="w-12 h-12 rounded-full mr-2 hover:scale-110")
+        img(src=user.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
       a(href=`/users/${user._id}` class='hover:text-blue-600')
-        h1(class='text-2xl mr-2 font-medium')=user.username
+        h1(class='text-xl mr-2 font-medium')=user.username
       //- log out button 
       form(action="/logout/facebook" method="POST")
         input(type="hidden" name="accessToken" value=user.accessToken)
-        button(type="submit" class='bg-blue-600 text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold') Log out
-
+        button(type="submit" class='bg-blue-600 text-zinc-50 px-2 py-1 rounded hover:bg-blue-800 font-bold') Log out
+    if posts && posts.length
+      ul
+      each post in posts 
+        li=post.text
+    else 
+      p(class='text-center') There's no post
+      if suggestedFriends && suggestedFriends.length
+        p(class='text-center') Make some friends:
+        div(class='grid grid-cols-1 w-fit justify-center')
+          each friend in suggestedFriends 
+            div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
+              a(href=`/users/${friend._id}`)
+                img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+              a(href=`/users/${friend._id}` class='hover:text-blue-600')
+                h1(class='text-xl mr-2 font-medium')=friend.username
+              //- Friend request button
+              form(action="/friends" method="POST" )
+                button(type="submit" class='bg-blue-600 text-zinc-x 50 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold') Add friends

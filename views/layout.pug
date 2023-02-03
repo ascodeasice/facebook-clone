@@ -5,12 +5,7 @@ html
     link(rel='stylesheet', href='/stylesheets/tailwind-styled.css')
     meta(name="viewport" content="width=500, initial-scale=1")
   body(class='min-h-screen')
-    //- Header
-    header(class='flex bg-blue-600 m-0 p-7 drop-shadow-lg')
-      a(class='mr-2 hover:scale-125 flex align-center' href="https://github.com/ascodeasice/facebook-clone")
-        img(class='w-12 ' src="/images/github.svg")
-      a(href="/" class='text-5xl font-bold text-white hover:scale-105') Facebook Clone
-
+    include ./components/header 
     if user 
       block content
     else 

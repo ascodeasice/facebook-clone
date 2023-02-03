@@ -3,6 +3,7 @@ var router = express.Router();
 const passport = require("passport");
 const authController = require("../controllers/authController");
 const postController = require("../controllers/postController");
+const friendController = require("../controllers/friendController");
 
 /* GET home page. */
 router.get('/', postController.getPostFeed);
@@ -19,5 +20,7 @@ router.get('/oauth2/facebook/callback',
 router.post('/logout/facebook', authController.logOut);
 
 router.get("/users/:userId", (req, res) => res.send("NOT implemented: " + req.params.userId))
+
+router.post("/friendRequest/:userId1/:userId2", friendController.sendFriendRequest)
 
 module.exports = router;
