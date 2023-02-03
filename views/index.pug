@@ -1,6 +1,14 @@
 extends layout
 
 block content
-  form(action="/logout/facebook" method="POST")
-    input(type="hidden" name="accessToken" value=user.accessToken)
-    button(type="submit" class='bg-blue-600 text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold') Log out
+  div(class='grid justify-center')
+    div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-fit rounded-md mt-4')
+      a(href=`/users/${user._id}`)
+        img(src=user.profilePictureURL alt="Profile picture" class="w-12 h-12 rounded-full mr-2 hover:scale-110")
+      a(href=`/users/${user._id}` class='hover:text-blue-600')
+        h1(class='text-2xl mr-2 font-medium')=user.username
+      //- log out button 
+      form(action="/logout/facebook" method="POST")
+        input(type="hidden" name="accessToken" value=user.accessToken)
+        button(type="submit" class='bg-blue-600 text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold') Log out
+

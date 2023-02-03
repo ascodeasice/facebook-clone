@@ -1,5 +1,6 @@
 exports.logIn = (req, res) => {
-    res.redirect("/")
+    console.log("redirecting...")
+    res.redirect("/");
 }
 
 exports.logOut = (req, res) => {

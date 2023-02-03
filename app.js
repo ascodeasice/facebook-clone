@@ -56,7 +56,7 @@ passport.use(new FacebookStrategy({
             facebookId: profile.id,
             friends: [],
             bio: "",
-            profilePictureURL: profile.photos ? profile.photos[0].value : "",
+            profilePictureURL: profile.photos[0].value,
           });
 
           newUser.save((err) => {
