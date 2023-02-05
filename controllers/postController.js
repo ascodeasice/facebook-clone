@@ -8,13 +8,40 @@ exports.getPostFeed = (req, res, next) => {
     async.parallel(
         {
             suggestedFriends(callback) {
-                User.find({
-                    $and: [{ _id: { $nin: allFriends } },
-                    { _id: { $ne: res.locals.currentUser._id } }
-                    ]
-                })
+                User.aggregate([{
+                    // Doesn't exist friend request sent to this user
+                    $lookup: {
+                        from: 'friendrequests',
+                        let: { userId: '$_id' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $and: [
+                                        { $expr: { $eq: ['$to', '$$userId'] } },
+                                        { $expr: { $eq: ['$from', res.locals.currentUser._id] } }
+                                    ]
+                                }
+                            }
+                        ],
+                        as: 'friendRequests'
+                    }
+                },
+                {
+                    $match: {
+                        friendRequests: { $size: 0 }
+                    }
+                },
+                {
+                    $match: {
+                        $and: [{ _id: { $nin: allFriends } },
+                        { _id: { $ne: res.locals.currentUser._id } }
+                        ]
+                    }
+                }])
                     .limit(10) // suggest maximum 10 friends
                     .exec(callback)
+                // User
+                //     .exec(callback)
             },
             feedPosts(callback) {
                 Post.find({
