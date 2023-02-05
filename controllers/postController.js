@@ -40,8 +40,6 @@ exports.getPostFeed = (req, res, next) => {
                 }])
                     .limit(10) // suggest maximum 10 friends
                     .exec(callback)
-                // User
-                //     .exec(callback)
             },
             feedPosts(callback) {
                 Post.find({

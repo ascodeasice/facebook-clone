@@ -1,4 +1,12 @@
-header(class='flex bg-blue-600 m-0 p-7 drop-shadow-lg')
-    a(class='mr-2 hover:scale-125 flex align-center' href="https://github.com/ascodeasice/facebook-clone")
+header(class='flex flex-wrap bg-blue-600 m-0 p-7 drop-shadow-lg')
+    a(class='mr-2 hover:scale-125 flex items-center' href="https://github.com/ascodeasice/facebook-clone")
         img(class='w-12 ' src="/images/github.svg")
-    a(href="/" class='text-5xl font-bold text-white hover:scale-105') Facebook Clone
+    a(href="/" class='text-5xl font-bold text-white hover:scale-105 ') Facebook Clone
+    if user 
+        div(class='flex items-center mx-auto')
+            a(href='/' class='mr-2 hover:scale-125 flex align-center')
+                img(src='/images/house.svg' alt='Home' class='w-8 h-8')
+            a(href='/friends/${user._id}' class='mr-2 hover:scale-125 flex align-center')
+                img(src='/images/friend.svg' alt='Friend' class='w-8 h-8 invert')
+            a(href=`users` class='mr-2 hover:scale-125 flex align-center')
+                img(src='/images/users.svg' alt='Home' class='w-8 h-8 invert')
