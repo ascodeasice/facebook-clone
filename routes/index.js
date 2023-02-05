@@ -4,6 +4,7 @@ const passport = require("passport");
 const authController = require("../controllers/authController");
 const postController = require("../controllers/postController");
 const friendController = require("../controllers/friendController");
+const userController = require("../controllers/userController");
 
 /* GET home page. */
 router.get('/', postController.getPostFeed);
@@ -26,5 +27,7 @@ router.post("/friendRequest/:userId1/:userId2", friendController.sendFriendReque
 router.get("/posts/create", postController.createPostGet)
 
 router.post("/posts/create", postController.createPostPost)
+
+router.get("/users", userController.getUsers);
 
 module.exports = router;

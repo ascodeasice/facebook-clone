@@ -2,15 +2,16 @@ extends layout
 
 block content
   div(class='grid justify-center')
-    div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-full rounded-md mt-4')
-      a(href=`/users/${user._id}`)
-        img(src=user.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
-      a(href=`/users/${user._id}` class='hover:text-blue-600')
-        h1(class='text-xl mr-2 font-medium')=user.username
-      //- log out button 
-      form(action="/logout/facebook" method="POST")
-        input(type="hidden" name="accessToken" value=user.accessToken)
-        button(type="submit" class='bg-blue-600 text-zinc-50 px-2 py-1 rounded hover:bg-blue-800 font-bold') Log out
+    include ./components/profileBlock
+    //- div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-full rounded-md mt-4')
+    //-   a(href=`/users/${user._id}`)
+    //-     img(src=user.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+    //-   a(href=`/users/${user._id}` class='hover:text-blue-600')
+    //-     h1(class='text-xl mr-2 font-medium')=user.username
+    //-   //- log out button 
+    //-   form(action="/logout/facebook" method="POST")
+    //-     input(type="hidden" name="accessToken" value=user.accessToken)
+    //-     button(type="submit" class='bg-blue-600 text-zinc-50 px-2 py-1 rounded hover:bg-blue-800 font-bold') Log out
     
     //- New post button
     a(href="/posts/create" class='flex justify-center my-4')
@@ -21,17 +22,6 @@ block content
       each post in posts 
         li=post.text
     else 
-      p(class='text-center font-bold') There's no post
+      p(class='text-center') There's no post
+      a(class='text-center font-bold text-blue-600 hover:text-blue-800' href='/users') Make friends
       //- If there's no posts(user has no friends), suggest some friends
-      if suggestedFriends && suggestedFriends.length
-        p(class='text-center') Suggested friends:
-        div(class='grid grid-cols-1 w-fit justify-center')
-          each friend in suggestedFriends 
-            div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
-              a(href=`/users/${friend._id}`)
-                img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
-              a(href=`/users/${friend._id}` class='hover:text-blue-600')
-                h1(class='text-xl mr-2 font-medium')=friend.username
-              //- Friend request button
-              form(action='/friendRequest/'+user._id+"/"+friend._id method="POST" )
-                button(type="submit" class='bg-blue-600 text-zinc-x 50 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold') Add friends
