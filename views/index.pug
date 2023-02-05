@@ -16,9 +16,9 @@ block content
       each post in posts 
         li=post.text
     else 
-      p(class='text-center') There's no post
+      p(class='text-center font-bold') There's no post
       if suggestedFriends && suggestedFriends.length
-        p(class='text-center') Make some friends:
+        p(class='text-center') Suggested friends:
         div(class='grid grid-cols-1 w-fit justify-center')
           each friend in suggestedFriends 
             div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
@@ -27,5 +27,5 @@ block content
               a(href=`/users/${friend._id}` class='hover:text-blue-600')
                 h1(class='text-xl mr-2 font-medium')=friend.username
               //- Friend request button
-              form(action="/friends" method="POST" )
+              form(action='/friendRequest/'+user._id+"/"+friend._id method="POST" )
                 button(type="submit" class='bg-blue-600 text-zinc-x 50 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold') Add friends

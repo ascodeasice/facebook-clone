@@ -7,7 +7,7 @@ exports.getPostFeed = (req, res, next) => {
     async.parallel(
         {
             suggestedFriends(callback) {
-                User.find({ _id: { $nin: allFriends } })
+                User.find({ $and: [{ _id: { $nin: allFriends } }, { _id: { $ne: res.locals.currentUser._id } }] })
                     .limit(10) // suggest maximum 10 friends
                     .exec(callback)
             },
