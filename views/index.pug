@@ -11,12 +11,18 @@ block content
       form(action="/logout/facebook" method="POST")
         input(type="hidden" name="accessToken" value=user.accessToken)
         button(type="submit" class='bg-blue-600 text-zinc-50 px-2 py-1 rounded hover:bg-blue-800 font-bold') Log out
+    
+    //- New post button
+    a(href="/posts/create" class='flex justify-center my-4')
+      button(class="bg-blue-600 w-32 h-full  text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold text-center") New Post
+
     if posts && posts.length
       ul
       each post in posts 
         li=post.text
     else 
       p(class='text-center font-bold') There's no post
+      //- If there's no posts(user has no friends), suggest some friends
       if suggestedFriends && suggestedFriends.length
         p(class='text-center') Suggested friends:
         div(class='grid grid-cols-1 w-fit justify-center')
