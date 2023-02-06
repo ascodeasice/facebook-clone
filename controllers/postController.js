@@ -49,9 +49,10 @@ exports.getPostFeed = (req, res, next) => {
                     ]
                 })
                     .populate("author")
+                    .populate("comments")
                     .sort({ createdAt: -1 })
                     .exec(callback)
-            }
+            },
         },
         (err, results) => {
             if (err) {
@@ -64,6 +65,7 @@ exports.getPostFeed = (req, res, next) => {
                 posts: results.feedPosts,
                 suggestedFriends: results.suggestedFriends,
             });
+
         }
     )
 }
@@ -95,6 +97,7 @@ exports.createPostPost = [
             author: req.body.author,
             peopleLiked: [],
             text: req.body.text,
+            comments: [],
         });
         newPost.save(err => {
             if (err) {
@@ -176,7 +179,6 @@ exports.createCommentPost = [
         const newComment = new Comment({
             text: req.body.text,
             author: res.locals.currentUser._id,
-            post: req.params.postId,
         });
 
         newComment.save(err => {
@@ -184,6 +186,19 @@ exports.createCommentPost = [
                 return next(err);
             }
         });
+
+        Post.findById(req.params.postId)
+            .exec((err, post) => {
+                if (err) {
+                    return next(err);
+                }
+                post.comments.push(newComment._id);
+                post.save(err => {
+                    if (err) {
+                        return next(err);
+                    }
+                })
+            })
         res.redirect("/");
     }
 ]
