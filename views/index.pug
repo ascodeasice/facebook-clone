@@ -8,9 +8,26 @@ block content
       button(class="bg-blue-600 w-32 h-full  text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold text-center") New Post
 
     if posts && posts.length
-      ul
-      each post in posts 
-        li=post.text
+      //- Post feed
+      div(class='grid gap-y-4 w-[28rem]')
+        each post in posts 
+          div(class='grid shadow-md border border-gray-400 rounded-lg p-4')
+            div(class='grid grid-cols-[2rem_1fr] grid-rows-[min-content_min-content] gap-x-2 items-center')
+              a(href=`/users/${post.author._id}` class='row-span-2')
+                img(src=post.author.profilePictureURL class='w-12 rounded-full')
+              a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
+              p(class='text-gray-400 text-sm')=post.relativeCreatedAt 
+            p()=post.text
+            hr(class='h-0 bg-gray-400 mt-4')
+            //- TODO: put image of post here
+            div(class='flex mt-1')
+              form(action=`/posts/${post._id}/like/${user._id}` method="POST" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+                input(type='image' src='/images/like.svg' class=`w-6 h-6 mr-2` alt='Like')
+                button(class='text-md bg-none w-full text-left') Like
+              form(action=`/posts/${post._id}/comment/${user._id}` method="GET" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+                input(type='image' src='/images/comment.svg' class=`w-6 h-6 mr-2` alt='Submit')
+                button(type='submit' class='text-md bg-none w-full text-left') Comment
+          
     else 
       p(class='text-center') There's no post
       a(class='text-center font-bold text-blue-600 hover:text-blue-800' href='/users') Make friends

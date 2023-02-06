@@ -47,6 +47,7 @@ exports.getPostFeed = (req, res, next) => {
                     { author: res.locals.currentUser._id }
                     ]
                 })
+                    .populate("author")
                     .sort({ updatedAt: -1 })
                     .exec(callback)
             }

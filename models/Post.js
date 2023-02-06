@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const { DateTime } = require("luxon");
 
 const PostSchema = new Schema({
     text: { type: String, required: true },
@@ -9,5 +10,9 @@ const PostSchema = new Schema({
     {
         timestamps: true,
     });
+
+PostSchema.virtual("relativeCreatedAt").get(function () {
+    return DateTime.fromJSDate(new Date(this.createdAt)).toRelative();
+});
 
 module.exports = mongoose.model("Post", PostSchema);
