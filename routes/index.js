@@ -30,4 +30,8 @@ router.post("/posts/create", postController.createPostPost)
 
 router.get("/users", userController.getUsers);
 
+router.get("/friends/:userId", friendController.getFriends);
+
+router.post("/friendRequest/accept/:userId/:userId2", friendController.acceptRequest)
+
 module.exports = router;

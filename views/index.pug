@@ -3,16 +3,6 @@ extends layout
 block content
   div(class='grid justify-center')
     include ./components/profileBlock
-    //- div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-full rounded-md mt-4')
-    //-   a(href=`/users/${user._id}`)
-    //-     img(src=user.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
-    //-   a(href=`/users/${user._id}` class='hover:text-blue-600')
-    //-     h1(class='text-xl mr-2 font-medium')=user.username
-    //-   //- log out button 
-    //-   form(action="/logout/facebook" method="POST")
-    //-     input(type="hidden" name="accessToken" value=user.accessToken)
-    //-     button(type="submit" class='bg-blue-600 text-zinc-50 px-2 py-1 rounded hover:bg-blue-800 font-bold') Log out
-    
     //- New post button
     a(href="/posts/create" class='flex justify-center my-4')
       button(class="bg-blue-600 w-32 h-full  text-zinc-50 px-3 py-2 rounded hover:bg-blue-800 font-bold text-center") New Post

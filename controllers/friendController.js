@@ -25,7 +25,7 @@ exports.sendFriendRequest = (req, res, next) => {
             }
             // If both users are friends, redirect back
             if (results.sender.friends.includes(results.receiver._id)) {
-                res.redirect("/");
+                res.redirect("/users");
                 return;
             }
             // Add use as friend if receiver is a fake user
@@ -45,7 +45,7 @@ exports.sendFriendRequest = (req, res, next) => {
                     }
                 })
 
-                res.redirect("/");
+                res.redirect("/users");
                 return;
             }
             // send request to real user, wait for response
@@ -53,12 +53,93 @@ exports.sendFriendRequest = (req, res, next) => {
                 from: results.sender._id,
                 to: results.receiver._id,
             });
-            console.log(newFriendRequest);
             newFriendRequest.save((err) => {
                 if (err) {
                     return next(err);
                 }
-                res.redirect("/");
+                res.redirect("/users");
             })
         })
+}
+
+exports.getFriends = (req, res, next) => {
+    async.parallel(
+        {
+            user(callback) {
+                User.findById(req.params.userId)
+                    .populate("friends")
+                    .exec(callback);
+            },
+            friendRequests(callback) {
+                FriendRequest.find({ to: req.params.userId })
+                    .populate("from")
+                    .exec(callback);
+            }
+        },
+        (err, results) => {
+            if (err) {
+                return next(err);
+            }
+            res.render("friends", {
+                title: "Friends",
+                user: res.locals.currentUser,
+                friends: results.user.friends,
+                friendRequests: results.friendRequests,
+            })
+        });
+}
+
+exports.acceptRequest = (req, res, next) => {
+    async.parallel(
+        {
+            accepter(callback) {
+                User.findById(req.params.userId)
+                    .exec(callback)
+            },
+            sender(callback) {
+                User.findById(req.params.userId2)
+                    .exec(callback);
+            }
+        },
+        (err, results) => {
+            if (err) {
+                return next(err);
+            }
+            if (results.accepter == null || results.sender == null) {
+                const error = new Error("User not found");
+                error.status = 404;
+                return next(error);
+            }
+            // already friends
+            if (results.accepter.friends.includes(results.sender._id)) {
+                const error = new Error("Already friends");
+                error.status = 404;
+                res.redirect(`/friends/${req.params.userId}`);
+                return;
+            }
+            // make them friends
+            results.accepter.friends.push(results.sender._id);
+            results.sender.friends.push(results.accepter._id);
+
+            results.accepter.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            });
+
+            results.sender.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            })
+
+            // delete friend request
+            FriendRequest.findOneAndRemove({ from: results.sender._id, to: results.accepter._id }, (err, request) => {
+                if (err) {
+                    return next(err);
+                }
+            })
+
+            res.redirect(`/friends/${req.params.userId}`);
+        });
 }
