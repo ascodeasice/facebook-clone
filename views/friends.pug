@@ -16,7 +16,7 @@ block content
                     div(class='flex flex-col')
                         form(action=`/friendRequest/accept/${user._id}/${request.from._id}` method="POST" )
                             button(type="submit" class='bg-blue-600 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold w-full mb-2') Accept
-                        form(action='/friendRequest/delete/'+user._id+"/"+request.from._id method="POST" )
+                        form(action='/friendRequest/decline/'+user._id+"/"+request.from._id method="POST" )
                             button(type="submit" class='bg-red-600 px-2 py-1 text-white rounded hover:bg-red-800 font-bold w-full') Decline
 
             hr(class='h-1 bg-gray-400 mt-4')
@@ -31,7 +31,7 @@ block content
                     a(href=`/users/${friend._id}` class='hover:text-blue-600')
                         h1(class='text-xl mr-2 font-medium')=friend.username
                     //- Delete friend button
-                    form(action='/friends/'+user._id+"/"+friend._id method="DELETE" )
+                    form(action=`/friends/delete/${user._id}/${friend._id}` method="POST" )
                         button(type="submit" class='bg-red-600 px-2 py-1 text-white rounded hover:bg-red-800 font-bold') Delete
         else 
             p(class='text-center') You don't have any friend

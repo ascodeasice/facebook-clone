@@ -34,4 +34,6 @@ router.get("/friends/:userId", friendController.getFriends);
 
 router.post("/friendRequest/accept/:userId/:userId2", friendController.acceptRequest)
 
+router.post("/friends/delete/:userId/:userId2", friendController.deleteFriend)
+
 module.exports = router;

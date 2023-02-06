@@ -143,3 +143,52 @@ exports.acceptRequest = (req, res, next) => {
             res.redirect(`/friends/${req.params.userId}`);
         });
 }
+
+exports.deleteFriend = (req, res, next) => {
+    async.parallel(
+        {
+            user1(callback) {
+                User.findById(req.params.userId)
+                    .exec(callback);
+            },
+            user2(callback) {
+                User.findById(req.params.userId2)
+                    .exec(callback);
+            }
+        },
+        (err, results) => {
+            const { user1, user2 } = results;
+            if (err) {
+                return next(err);
+            }
+            if (user1 == null || user2 == null) {
+                const error = new Error("User not found");
+                error.status = 404;
+                return next(error);
+            }
+            // They aren't friends
+            if (!user1.friends.includes(user2._id) && !user2.friends.includes(user1._id)) {
+                res.redirect(`/friends/${req.params.userId}`);
+                return;
+            }
+
+            // remove users from friends
+            user1.friends.splice(user1.friends.indexOf(user2._id), 1);
+            user2.friends.splice(user2.friends.indexOf(user1._id), 1);
+
+            user1.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            });
+
+            user2.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            });
+
+            res.redirect(`/friends/${req.params.userId}`);
+        }
+    )
+}
