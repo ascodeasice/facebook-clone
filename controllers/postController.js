@@ -58,7 +58,7 @@ exports.getPostFeed = (req, res, next) => {
             }
 
             res.render("index", {
-                title: "Home",
+                title: "Facebook Clone",
                 user: res.locals.currentUser,
                 posts: results.feedPosts,
                 suggestedFriends: results.suggestedFriends,
@@ -103,3 +103,37 @@ exports.createPostPost = [
         res.redirect("/");
     }
 ]
+
+exports.likePost = (req, res, next) => {
+    // make other user like this post
+    if (req.params.userId != res.locals.currentUser._id) {
+        res.redirect("/");
+    }
+    Post.findById(req.params.postId)
+        .exec((err, post) => {
+            if (err) {
+                return next(err);
+            }
+            if (post == null) {
+                const error = new Error("Post not found");
+                error.status = 404;
+                return next(error);
+            }
+            // if user already liked, remove the user
+            if (post.peopleLiked.includes(req.params.userId)) {
+                post.peopleLiked.splice(post.peopleLiked.indexOf(req.params.userId), 1);
+            }
+            // not liked
+            else {
+                post.peopleLiked.push(req.params.userId);
+            }
+
+            post.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            })
+
+            res.redirect("/");
+        })
+}

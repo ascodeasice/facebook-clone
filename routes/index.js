@@ -38,4 +38,6 @@ router.post("/friends/delete/:userId/:userId2", friendController.deleteFriend)
 
 router.post("/friendRequest/decline/:userId/:userId2", friendController.declineRequest);
 
+router.post("/posts/:postId/like/:userId", postController.likePost);
+
 module.exports = router;

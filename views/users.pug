@@ -3,12 +3,16 @@ block content
     div(class='grid justify-center')
         include ./components/profileBlock
         div(class='grid  w-fit justify-center')
-            each friend in suggestedFriends 
-                div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
-                    a(href=`/users/${friend._id}`)
-                        img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
-                    a(href=`/users/${friend._id}` class='hover:text-blue-600')
-                        h1(class='text-xl mr-2 font-medium')=friend.username
-                    //- Friend request button
-                    form(action='/friendRequest/'+user._id+"/"+friend._id method="POST" )
-                        button(type="submit" class='bg-blue-600 text-zinc-x 50 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold') Add friends
+            if suggestedFriends&&suggestedFriends.length
+                each friend in suggestedFriends 
+                    div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
+                        a(href=`/users/${friend._id}`)
+                            img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+                        a(href=`/users/${friend._id}` class='hover:text-blue-600')
+                            h1(class='text-xl mr-2 font-medium')=friend.username
+                        //- Friend request button
+                        form(action='/friendRequest/'+user._id+"/"+friend._id method="POST" )
+                            button(type="submit" class='bg-blue-600 text-zinc-x 50 px-2 py-1 text-white rounded hover:bg-blue-800 font-bold') Add friends
+            else 
+                p You've sent friend requests to all users
+                a(href="/" class='text-blue-600 hover:text-blue-800 font-bold') Check their posts

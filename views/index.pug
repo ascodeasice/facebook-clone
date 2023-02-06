@@ -19,12 +19,22 @@ block content
               p(class='text-gray-400 text-sm')=post.relativeCreatedAt 
             p()=post.text
             hr(class='h-0 bg-gray-400 mt-4')
+            //- like count
+            if post.peopleLiked.length 
+              div(class='flex mt-2')
+                img(src="/images/blueLike.svg" class='w-6 h-6 rounded-full p-1 bg-gray-200 mr-1')
+                p=post.peopleLiked.length
             //- TODO: put image of post here
             div(class='flex mt-1')
               form(action=`/posts/${post._id}/like/${user._id}` method="POST" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
-                input(type='image' src='/images/like.svg' class=`w-6 h-6 mr-2` alt='Like')
+                //- An submit button that looks like image
+                if post.peopleLiked.includes(user._id)
+                  input(type='image' src='/images/blueLike.svg' class=`w-6 h-6 mr-2 ` alt='Like')
+                else
+                  input(type='image' src='/images/like.svg' class=`w-6 h-6 mr-2` alt='Like')
                 button(class='text-md bg-none w-full text-left') Like
               form(action=`/posts/${post._id}/comment/${user._id}` method="GET" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+                //- An submit button that looks like image
                 input(type='image' src='/images/comment.svg' class=`w-6 h-6 mr-2` alt='Submit')
                 button(type='submit' class='text-md bg-none w-full text-left') Comment
           
