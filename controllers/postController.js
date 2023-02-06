@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 const async = require("async");
+const Comment = require("../models/Comment");
 const { body, validationResult } = require("express-validator");
 
 exports.getPostFeed = (req, res, next) => {
@@ -146,3 +147,43 @@ exports.deletePost = (req, res, next) => {
     });
     res.redirect('/');
 }
+
+exports.createCommentGet = (req, res, next) => {
+    res.render("createComment", {
+        title: "Comment",
+        user: res.locals.currentUser,
+    });
+}
+
+exports.createCommentPost = [
+    body("author", "Author is required")
+        .trim()
+        .isLength({ min: 1 }),
+    body("text", "Comment text is required")
+        .trim()
+        .isLength({ min: 1 }),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.render("createComment", {
+                title: "Comment",
+                user: res.locals.currentUser,
+                errors: errors.array(),
+            });
+            return;
+        }
+
+        const newComment = new Comment({
+            text: req.body.text,
+            author: res.locals.currentUser._id,
+            post: req.params.postId,
+        });
+
+        newComment.save(err => {
+            if (err) {
+                return next(err);
+            }
+        });
+        res.redirect("/");
+    }
+]
