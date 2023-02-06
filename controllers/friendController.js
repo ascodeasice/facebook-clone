@@ -192,3 +192,15 @@ exports.deleteFriend = (req, res, next) => {
         }
     )
 }
+
+exports.declineRequest = (req, res, next) => {
+    FriendRequest.findOneAndRemove({
+        from: req.params.userId2,
+        to: req.params.userId
+    }, (err, request) => {
+        if (err) {
+            return next(err);
+        }
+    });
+    res.redirect(`/friends/${req.params.userId}`);
+}
