@@ -12,18 +12,30 @@ block content
       div(class='grid gap-y-4 w-[28rem]')
         each post in posts 
           div(class='grid shadow-md border border-gray-400 rounded-lg p-4')
-            div(class='grid grid-cols-[2rem_1fr] grid-rows-[min-content_min-content] gap-x-2 items-center')
-              a(href=`/users/${post.author._id}` class='row-span-2')
-                img(src=post.author.profilePictureURL class='w-12 rounded-full')
-              a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
-              p(class='text-gray-400 text-sm')=post.relativeCreatedAt 
-            p()=post.text
+            div(class='grid grid-cols-[2rem_1fr_min-content] grid-rows-[min-content_min-content] gap-x-2 items-center')
+              //- owner of post
+              if post.author._id.toString()==user._id.toString()
+                a(href=`/users/${post.author._id}` class='row-span-2')
+                  img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
+                p(class='text-gray-400 text-sm')=post.relativeCreatedAt
+                form(action=`/posts/${post._id}/delete` method='POST' class=' row-start-1 row-end-3 col-start-3 col-end-4 ')
+                  button(class='bg-red-600 hover:bg-red-800 font-bold text-white rounded p-2 ') Delete 
+              //- other people's post
+              else 
+                a(href=`/users/${post.author._id}` class='row-span-2')
+                  img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                a(href=`/users/${post.author._id}` class='font-bold h-min col-span-2')=post.author.username
+                p(class='text-gray-400 text-sm col-span-2')=post.relativeCreatedAt
+            p(class='whitespace-pre	')=post.text
             hr(class='h-0 bg-gray-400 mt-4')
             //- like count
+            //- when hovering like count, it shows who liked this post
             if post.peopleLiked.length 
               div(class='flex mt-2')
                 img(src="/images/blueLike.svg" class='w-6 h-6 rounded-full p-1 bg-gray-200 mr-1')
                 p=post.peopleLiked.length
+            //- TODO: comment count
             //- TODO: put image of post here
             div(class='flex mt-1')
               form(action=`/posts/${post._id}/like/${user._id}` method="POST" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
@@ -42,3 +54,5 @@ block content
       p(class='text-center') There's no post
       a(class='text-center font-bold text-blue-600 hover:text-blue-800' href='/users') Make friends
       //- If there's no posts(user has no friends), suggest some friends
+
+    

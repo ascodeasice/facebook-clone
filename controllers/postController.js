@@ -48,7 +48,7 @@ exports.getPostFeed = (req, res, next) => {
                     ]
                 })
                     .populate("author")
-                    .sort({ updatedAt: -1 })
+                    .sort({ createdAt: -1 })
                     .exec(callback)
             }
         },
@@ -136,4 +136,13 @@ exports.likePost = (req, res, next) => {
 
             res.redirect("/");
         })
+}
+
+exports.deletePost = (req, res, next) => {
+    Post.findByIdAndRemove(req.params.postId, (err, post) => {
+        if (err) {
+            return next(err);
+        }
+    });
+    res.redirect('/');
 }
