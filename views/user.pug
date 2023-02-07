@@ -5,6 +5,9 @@ block content
             div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-fit justify-self-center rounded-md mt-4')
                 img(src=profileUser.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2")
                 h1(class='text-xl mr-2 font-medium')=profileUser.username
+                if profileUser._id.toString()==user._id
+                    a(href=`/users/${profileUser._id}/edit`) 
+                        button(class='bg-blue-600 hover:bg-blue-800 font-bold text-white rounded w-24 px-3 py-2 justify-self-center') Edit
             hr(class='h-1 bg-gray-400')
             p(class='bg-gray-200 p-4 rounded whitespace-pre-line w-full justify-self-center')=(profileUser.bio.trim()==""?"This user has no bio":profileUser.bio)
             hr(class="h-1 bg-gray-400")

@@ -50,4 +50,8 @@ router.get("/posts/:postId", postController.getPostDetail);
 
 router.post("/posts/:postId/comments/:commentId/delete", postController.deleteComment);
 
+router.get("/users/:userId/edit", userController.editProfileGet);
+
+router.post("/users/:userId/edit", userController.editProfilePost);
+
 module.exports = router;

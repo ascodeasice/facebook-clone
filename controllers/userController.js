@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const async = require("async");
 const Post = require("../models/Post");
+const { body, validationResult } = require("express-validator");
 
 exports.getUsers = (req, res, next) => {
     const allFriends = res.locals.currentUser.friends;
@@ -80,3 +81,54 @@ exports.getUser = (req, res, next) => {
         }
     );
 }
+
+exports.editProfileGet = (req, res, next) => {
+    // user tries to edit others' profile
+    if (req.params.userId.toString() != res.locals.currentUser._id.toString()) {
+        console.log("wrong user")
+        res.redirect("/");
+    }
+    res.render("profileForm", {
+        title: "Edit profile",
+        user: res.locals.currentUser,
+    })
+}
+
+exports.editProfilePost = [
+    body("profilePictureURL", "Profile picture url is required")
+        .trim()
+        .isLength({ min: 1 }),
+    body("username", "User name is required")
+        .trim()
+        .isLength({ min: 1 }),
+    // bio can be empty
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.render("profileForm", {
+                title: "Edit profile",
+                user: res.locals.currentUser,
+                errors: errors.array(),
+            });
+            return;
+        }
+        const newUser = new User({
+            _id: res.locals.currentUser._id,
+            username: req.body.username,
+            bio: req.body.bio,
+            profilePictureURL: req.body.profilePictureURL,
+            facebookId: res.locals.currentUser.facebookId,
+            friends: res.locals.currentUser.friends,
+        });
+
+        User.findByIdAndUpdate(res.locals.currentUser._id, newUser, (err, oldUser) => {
+            if (err) {
+                return next(err);
+            }
+            res.locals.currentUser = newUser;
+        })
+        res.redirect(`/users/${newUser._id}`);
+
+
+    }
+];
