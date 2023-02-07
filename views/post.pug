@@ -1,0 +1,59 @@
+extends layout 
+block content
+    div(class='flex justify-center mt-4')
+        div(class='grid gap-y-4 w-[28rem]')
+            div(class='grid shadow-md border border-gray-400 rounded-lg p-4')
+                div(class='grid grid-cols-[2rem_1fr_min-content] grid-rows-[min-content_min-content] gap-x-2 items-center')
+                    //- owner of 
+                    if post.author._id.toString()==user._id.toString()
+                        a(href=`/users/${post.author._id}` class='row-span-2')
+                            img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                        a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
+                        p(class='text-gray-400 text-sm')=post.relativeCreatedAt
+                        form(action=`/posts/${post._id}/delete` method='POST' class=' row-start-1 row-end-3 col-start-3 col-end-4 ')
+                            button(class='bg-red-600 hover:bg-red-800 font-bold text-white rounded p-2 ') Delete 
+                    //- other people's post
+                    else 
+                        a(href=`/users/${post.author._id}` class='row-span-2')
+                            img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                        a(href=`/users/${post.author._id}` class='font-bold h-min col-span-2')=post.author.username
+                        p(class='text-gray-400 text-sm col-span-2')=post.relativeCreatedAt
+                p(class='whitespace-pre	max-h-96 overflow-y-auto')=post.text
+                hr(class='h-0 bg-gray-400 mt-4')
+                //- like count
+                //-TODO: when hovering like count, it shows who liked this post
+                div(class='flex justify-between mt-2')
+                    if post.peopleLiked.length 
+                        div(class='flex ml-2')
+                            img(src="/images/blueLike.svg" class='w-6 h-6 rounded-full p-1 bg-gray-200 mr-1')
+                            p(class="text-left")=post.peopleLiked.length
+                    if post.comments.length 
+                        div(class='flex mr-2')
+                            a(href=`/posts/${post._id}` class="rounded-full bg-gray-200 mr-1 p-1 w-fit")
+                                img(src="/images/comment.svg"  class='w-4  h-4  bg-gray-200 ')
+                            p=post.comments.length
+                //- TODO: put image of post here
+                div(class='flex mt-1')
+                    form(action=`/posts/${post._id}/like/${user._id}` method="POST" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+                        //- An submit button that looks like image
+                        if post.peopleLiked.includes(user._id)
+                            input(type='image' src='/images/blueLike.svg' class=`w-6 h-6 mr-2 ` alt='Like')
+                        else
+                            input(type='image' src='/images/like.svg' class=`w-6 h-6 mr-2` alt='Like')
+                        button(class='text-md bg-none w-full text-left') Like
+                    form(action=`/posts/${post._id}/comment/create` method="GET" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+                        //- An submit button that looks like image
+                        input(type='image' src='/images/comment.svg' class=`w-6 h-6 mr-2` alt='Submit')
+                        button(type='submit' class='text-md bg-none w-full text-left') Comment
+            ul
+            each comment in post.comments
+                div(class='grid grid-cols-1')
+                    div(class='flex items-start')
+                        a(href=`/users/${comment.author._id}` class='mr-2 w-12 h-12 hover:scale-110 ')
+                            img(src=comment.author.profilePictureURL class='rounded-full ')
+                        div(class='bg-gray-200 rounded-md w-full p-2  grid grid-cols-[1fr_min-content]')
+                            a(href=`/users/${comment.author._id}` class='font-bold hover:text-blue-600')=comment.author.username
+                            if comment.author._id.toString()==user._id 
+                                button(class='bg-red-600 hover:bg-red-800 font-bold text-white w-fit h-fit p-2 rounded text-xs mb-2') Delete
+                            p(class='whitespace-pre max-h-60 overflow-y-auto col-span-2')=comment.text
+                    p(class='text-gray-400 font-bold text-sm mt-0 justify-self-end')=comment.relativeCreatedAt

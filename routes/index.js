@@ -42,8 +42,10 @@ router.post("/posts/:postId/like/:userId", postController.likePost);
 
 router.post("/posts/:postId/delete", postController.deletePost);
 
-router.get("/posts/:postId/comment/:userId", postController.createCommentGet);
+router.get("/posts/:postId/comment/create", postController.createCommentGet);
 
-router.post("/posts/:postId/comment/:userId", postController.createCommentPost);
+router.post("/posts/:postId/comment/create", postController.createCommentPost);
+
+router.get("/posts/:postId", postController.getPostDetail);
 
 module.exports = router;

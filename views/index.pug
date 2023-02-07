@@ -20,14 +20,14 @@ block content
                 a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
                 p(class='text-gray-400 text-sm')=post.relativeCreatedAt
                 form(action=`/posts/${post._id}/delete` method='POST' class=' row-start-1 row-end-3 col-start-3 col-end-4 ')
-                  button(class='bg-red-600 hover:bg-red-800 font-bold text-white rounded p-2 ') Delete 
+                  button(class='bg-red-600 hover:bg-red-800 font-bold text-white rounded p-2 mb-2') Delete 
               //- other people's post
               else 
                 a(href=`/users/${post.author._id}` class='row-span-2')
                   img(src=post.author.profilePictureURL class='w-12 rounded-full')
                 a(href=`/users/${post.author._id}` class='font-bold h-min col-span-2')=post.author.username
                 p(class='text-gray-400 text-sm col-span-2')=post.relativeCreatedAt
-            p(class='whitespace-pre	')=post.text
+            p(class='whitespace-pre	max-h-96 overflow-y-auto')=post.text
             hr(class='h-0 bg-gray-400 mt-4')
             //- like count
             //-TODO: when hovering like count, it shows who liked this post
@@ -38,7 +38,7 @@ block content
                   p(class="text-left")=post.peopleLiked.length
               if post.comments.length 
                 div(class='flex mr-2')
-                  div(class="rounded-full bg-gray-200 mr-1 p-1 w-fit")
+                  a(href=`/posts/${post._id}` class="rounded-full bg-gray-200 mr-1 p-1 w-fit hover:scale-110")
                     img(src="/images/comment.svg"  class='w-4  h-4  bg-gray-200 ')
                   p=post.comments.length
             //- TODO: put image of post here
@@ -50,11 +50,10 @@ block content
                 else
                   input(type='image' src='/images/like.svg' class=`w-6 h-6 mr-2` alt='Like')
                 button(class='text-md bg-none w-full text-left') Like
-              form(action=`/posts/${post._id}/comment/${user._id}` method="GET" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
+              form(action=`/posts/${post._id}/comment/create` method="GET" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
                 //- An submit button that looks like image
                 input(type='image' src='/images/comment.svg' class=`w-6 h-6 mr-2` alt='Submit')
                 button(type='submit' class='text-md bg-none w-full text-left') Comment
-          
     else 
       p(class='text-center') There's no post
       a(class='text-center font-bold text-blue-600 hover:text-blue-800' href='/users') Make friends

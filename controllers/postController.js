@@ -138,7 +138,7 @@ exports.likePost = (req, res, next) => {
                 }
             })
 
-            res.redirect("/");
+            res.redirect(`/posts/${req.params.postId}`);
         })
 }
 
@@ -146,6 +146,14 @@ exports.deletePost = (req, res, next) => {
     Post.findByIdAndRemove(req.params.postId, (err, post) => {
         if (err) {
             return next(err);
+        }
+
+        for (let i = 0; i < post.comments.length; i++) {
+            Comment.findByIdAndRemove(post.comments[i]._id, (err, comment) => {
+                if (err) {
+                    return next(err);
+                }
+            });
         }
     });
     res.redirect('/');
@@ -199,6 +207,37 @@ exports.createCommentPost = [
                     }
                 })
             })
-        res.redirect("/");
+        res.redirect(`/posts/${req.params.postId}`);
     }
 ]
+
+exports.getPostDetail = (req, res, next) => {
+    Post.findById(req.params.postId)
+        .populate("author")
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'author',
+                model: 'User'
+            }
+        })
+        .exec((err, post) => {
+            if (err) {
+                return next(err);
+            }
+            res.render("post", {
+                title: "Post",
+                post: post,
+                user: res.locals.currentUser,
+            })
+        });
+}
+
+exports.deleteComment = (req, res, next) => {
+    Comment.findByIdAndRemove(req.params.commentId, (err, comment) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect(`/posts/${req.params.postId}`)
+    });
+}
