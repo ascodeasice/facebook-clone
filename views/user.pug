@@ -1,0 +1,18 @@
+extends layout 
+block content 
+    div(class='flex w-full justify-center')
+        div(class='grid gap-y-4 w-[28rem]')
+            div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-fit justify-self-center rounded-md mt-4')
+                img(src=profileUser.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2")
+                h1(class='text-xl mr-2 font-medium')=profileUser.username
+            hr(class='h-1 bg-gray-200')
+            p(class='bg-gray-200 p-4 rounded whitespace-pre-line w-96 justify-self-center')=(profileUser.bio.trim()==""?"This user has no bio":profileUser.bio)
+            hr(class="h-1 bg-gray-200")
+            //- Post feed
+            if posts&& posts.length
+                each post in posts 
+                    include ./mixins/postBlock.pug
+                    +postBlock(post)
+            else 
+                p This user has no posts
+

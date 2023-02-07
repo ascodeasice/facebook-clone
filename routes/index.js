@@ -20,7 +20,7 @@ router.get('/oauth2/facebook/callback',
 
 router.post('/logout/facebook', authController.logOut);
 
-router.get("/users/:userId", (req, res) => res.send("NOT implemented: " + req.params.userId))
+router.get("/users/:userId", userController.getUser)
 
 router.post("/friendRequest/:userId1/:userId2", friendController.sendFriendRequest)
 
@@ -47,5 +47,7 @@ router.get("/posts/:postId/comment/create", postController.createCommentGet);
 router.post("/posts/:postId/comment/create", postController.createCommentPost);
 
 router.get("/posts/:postId", postController.getPostDetail);
+
+router.post("/posts/:postId/comments/:commentId/delete", postController.deleteComment);
 
 module.exports = router;

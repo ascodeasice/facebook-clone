@@ -710,6 +710,10 @@ video {
   width: 13rem;
 }
 
+.w-96 {
+  width: 24rem;
+}
+
 .resize-none {
   resize: none;
 }
@@ -795,8 +799,16 @@ video {
   overflow-y: auto;
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
 .whitespace-pre {
   white-space: pre;
+}
+
+.whitespace-pre-line {
+  white-space: pre-line;
 }
 
 .rounded-md {
