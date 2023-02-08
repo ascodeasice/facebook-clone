@@ -16,4 +16,4 @@ A clone of facebook, idea from The Odin Project tutorial.
 ## User detail
 ![](./public/results/user.png)
 ## Live Preview
-[Link]()
+[Link](https://facebook-clone-ascodeasice.up.railway.app/)

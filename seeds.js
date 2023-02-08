@@ -87,20 +87,42 @@ for (let i = 0; i < fakeFacebookId.length; i++) {
                 //     .exec((err, posts) => {
                 //         posts.forEach(post => Post.findByIdAndRemove(post._id, (err, post) => console.log(post + " is deleted")))
                 //     })
-                fetch(faker.image.nature())
+
+                // SECTION create fake posts
+                // fetch(faker.image.nature())
+                //     .then(res => res.arrayBuffer())
+                //     .then((res) => {
+                //         const post = new Post({
+                //             author: users[i]._id,
+                //             text: faker.hacker.phrase(),
+                //             images: [Buffer.from(res, "utf-8")],
+                //         })
+                //         post.save()
+                //             .catch(err => {
+                //                 console.log(err);
+                //             })
+                //             .then(post => console.log("saved"));
+                //     })
+
+                // SECTION upload fake users' URL
+                fetch(users[i].profilePictureURL)
                     .then(res => res.arrayBuffer())
-                    .then((res) => {
-                        const post = new Post({
-                            author: users[i]._id,
-                            text: faker.hacker.phrase(),
-                            images: [Buffer.from(res, "utf-8")],
-                        })
-                        post.save()
-                            .catch(err => {
+                    .then(res => {
+                        const newUser = new User({
+                            _id: users[i]._id,
+                            profilePicture: Buffer.from(res, "utf-8"),
+                        });
+                        User.findByIdAndUpdate(users[i]._id, newUser, (err, oldUser) => {
+                            if (err) {
                                 console.log(err);
-                            })
-                            .then(post => console.log("saved"));
+                                return;
+                            }
+                            console.log(oldUser.facebookId + " is updated");
+                        })
+
                     })
+
+                // TODO: upload them because using URL is unsafe blah blah blah
             }
         })
 }
