@@ -7,6 +7,7 @@ const session = require("express-session");
 const cors = require("cors");
 require("dotenv").config();
 const compression = require("compression");
+const helmet = require("helmet");
 
 var indexRouter = require('./routes/index');
 
