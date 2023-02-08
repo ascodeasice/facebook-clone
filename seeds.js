@@ -2,6 +2,7 @@
 const { faker } = require("@faker-js/faker");
 const { DateTime } = require("luxon");
 const User = require("./models/User");
+const Post = require("./models/Post");
 
 require("dotenv").config();
 
@@ -65,3 +66,42 @@ async function main() {
 // })
 
 // SECTION generate fake posts
+
+const numbers = [];
+for (let i = 0; i < 10; i++) {
+    numbers.push(i);
+}
+
+const fakeFacebookId = numbers.map(num => "fakeUserId" + num.toString());
+
+for (let i = 0; i < fakeFacebookId.length; i++) {
+    User.find({ facebookId: fakeFacebookId[i] })
+        .exec((err, users) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            for (let i = 0; i < users.length; i++) {
+                // SECTION delete all fake post
+                // Post.find({ author: users[i]._id })
+                //     .exec((err, posts) => {
+                //         posts.forEach(post => Post.findByIdAndRemove(post._id, (err, post) => console.log(post + " is deleted")))
+                //     })
+                fetch(faker.image.nature())
+                    .then(res => res.arrayBuffer())
+                    .then((res) => {
+                        const post = new Post({
+                            author: users[i]._id,
+                            text: faker.hacker.phrase(),
+                            images: [Buffer.from(res, "utf-8")],
+                        })
+                        post.save()
+                            .catch(err => {
+                                console.log(err);
+                            })
+                            .then(post => console.log("saved"));
+                    })
+            }
+        })
+}
+

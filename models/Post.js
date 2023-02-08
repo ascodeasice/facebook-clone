@@ -5,7 +5,7 @@ const { DateTime } = require("luxon");
 const PostSchema = new Schema({
     text: { type: String, required: true },
     peopleLiked: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    author: { type: Schema.Types.ObjectId, ref: "User" },
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     images: [{ type: Buffer }],
 },
