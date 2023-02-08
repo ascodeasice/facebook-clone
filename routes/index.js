@@ -15,8 +15,7 @@ router.get('/login/facebook', passport.authenticate('facebook'));
 
 // log in callback
 router.get('/oauth2/facebook/callback',
-  passport.authenticate('facebook',
-    { failureMessage: true, failureRedirect: "/", successRedirect: "/" }),
+  passport.authenticate('facebook'),
   authController.logIn
 );
 

@@ -6,7 +6,6 @@ const { body, validationResult } = require("express-validator");
 
 exports.getPostFeed = (req, res, next) => {
     if (!res.locals.currentUser) {
-        console.log(res.locals.currentUser);
         res.render("index", {
             title: "Facebook Clone",
         });
