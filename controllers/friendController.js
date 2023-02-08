@@ -29,7 +29,9 @@ exports.sendFriendRequest = (req, res, next) => {
                 return;
             }
             // Add use as friend if receiver is a fake user
-            if (results.receiver.facebookId.startsWith("fakeUserId")) {
+            // Or if current user is guest account, add the other user as friend immediately
+            if (results.receiver.facebookId.startsWith("fakeUserId")
+                || res.locals.currentUser.facebookId == "GuestAccount") {
                 results.receiver.friends.push(results.sender._id);
                 results.sender.friends.push(results.receiver._id);
 

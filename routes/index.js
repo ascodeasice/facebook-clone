@@ -56,4 +56,6 @@ router.get("/users/:userId/edit", userController.editProfileGet);
 
 router.post("/users/:userId/edit", upload.single("profilePicture"), userController.editProfilePost);
 
+router.post("/login/guest", passport.authenticate("guestLogIn"), authController.guestLogIn);
+
 module.exports = router;

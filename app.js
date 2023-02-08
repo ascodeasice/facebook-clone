@@ -82,6 +82,21 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+// SECTION configure passport.js custom strategy(guest log in)
+const CustomStrategy = require("passport-custom").Strategy;
+
+passport.use('guestLogIn', new CustomStrategy(
+  function (req, done) {
+    User.findOne({ facebookId: "GuestAccount" })
+      .exec((err, user) => {
+        if (err) {
+          return done(err);
+        }
+        done(null, user);
+      })
+  }
+));
+
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());

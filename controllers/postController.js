@@ -5,6 +5,13 @@ const Comment = require("../models/Comment");
 const { body, validationResult } = require("express-validator");
 
 exports.getPostFeed = (req, res, next) => {
+    if (!res.locals.currentUser) {
+        console.log(res.locals.currentUser);
+        res.render("index", {
+            title: "Facebook Clone",
+        });
+        return;
+    }
     const allFriends = res.locals.currentUser.friends;
     async.parallel(
         {
@@ -50,6 +57,7 @@ exports.getPostFeed = (req, res, next) => {
                 })
                     .populate("author")
                     .populate("comments")
+                    .populate("peopleLiked")
                     .sort({ createdAt: -1 })
                     .exec(callback)
             },
@@ -65,8 +73,6 @@ exports.getPostFeed = (req, res, next) => {
                 posts: results.feedPosts,
                 suggestedFriends: results.suggestedFriends,
             });
-
-
         }
     )
 }

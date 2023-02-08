@@ -8,15 +8,10 @@ html
   body(class='min-h-screen')
     include ./components/header 
     if user
-      if error 
-        h1= message
-        h2= error.status
-        pre #{error.stack}
-      else 
-        block content
+      block content
     else 
       div(class='grid grid-cols-1 grid-rows-2 gap-y-2 min-h-2 mt-5')
         a(href="/login/facebook" class='justify-self-center') 
           button(class='bg-blue-600 hover:bg-blue-800 p-3 text-white font-bold rounded-md w-52') Log In With Facebook
-        a(href="/login/guest" class='justify-self-center') 
-          button(class='bg-gray-500  hover:bg-gray-700 p-3 text-white font-bold rounded-md w-52') Log In As Guest
+        form(action="/login/guest" method="POST" class='justify-self-center') 
+          button(type='submit' class='bg-gray-500  hover:bg-gray-700 p-3 text-white font-bold rounded-md w-52') Log In As Guest
