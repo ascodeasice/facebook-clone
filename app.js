@@ -6,6 +6,7 @@ var logger = require('morgan');
 const session = require("express-session");
 const cors = require("cors");
 require("dotenv").config();
+const compression = require("compression");
 
 var indexRouter = require('./routes/index');
 
@@ -105,6 +106,9 @@ app.use(function (req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
+
+app.use(compression()); // Compress all routes
+app.use(helmet());
 
 app.use('/', indexRouter);
 
