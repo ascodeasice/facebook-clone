@@ -3,7 +3,8 @@ block content
     div(class='flex w-full justify-center')
         div(class='grid gap-y-4 w-[28rem]')
             div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-fit justify-self-center rounded-md mt-4')
-                img(src=profileUser.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2")
+                include ./mixins/profilePicture.pug 
+                +profilePicture(profileUser,"w-8 h-8 rounded-full mr-2",profileUser.profilePicture)
                 h1(class='text-xl mr-2 font-medium')=profileUser.username
                 if profileUser._id.toString()==user._id
                     a(href=`/users/${profileUser._id}/edit`) 

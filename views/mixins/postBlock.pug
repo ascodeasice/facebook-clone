@@ -1,10 +1,11 @@
 mixin postBlock(post)
+    include ./profilePicture.pug 
     div(class='grid shadow-md border border-gray-400 rounded-lg p-4')
         div(class='grid grid-cols-[2rem_1fr_min-content] grid-rows-[min-content_min-content] gap-x-2 items-center')
             //- owner of 
             if post.author._id.toString()==user._id.toString()
                 a(href=`/users/${post.author._id}` class='row-span-2')
-                    img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                    +profilePicture(post.author,"w-12 rounded-full")
                 a(href=`/users/${post.author._id}` class='font-bold h-min')=post.author.username
                 p(class='text-gray-400 text-sm')=post.relativeCreatedAt
                 form(action=`/posts/${post._id}/delete` method='POST' class=' row-start-1 row-end-3 col-start-3 col-end-4 ')
@@ -12,7 +13,7 @@ mixin postBlock(post)
                 //- other people's post
             else 
                 a(href=`/users/${post.author._id}` class='row-span-2')
-                    img(src=post.author.profilePictureURL class='w-12 rounded-full')
+                    +profilePicture(post.author,"w-12 rounded-full")
                 a(href=`/users/${post.author._id}` class='font-bold h-min col-span-2')=post.author.username
                 p(class='text-gray-400 text-sm col-span-2')=post.relativeCreatedAt
         p(class='whitespace-pre-line max-h-96 overflow-y-auto')=post.text

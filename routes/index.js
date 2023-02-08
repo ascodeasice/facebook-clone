@@ -5,6 +5,7 @@ const authController = require("../controllers/authController");
 const postController = require("../controllers/postController");
 const friendController = require("../controllers/friendController");
 const userController = require("../controllers/userController");
+const upload = require("../multer/upload");
 
 /* GET home page. */
 router.get('/', postController.getPostFeed);
@@ -52,6 +53,6 @@ router.post("/posts/:postId/comments/:commentId/delete", postController.deleteCo
 
 router.get("/users/:userId/edit", userController.editProfileGet);
 
-router.post("/users/:userId/edit", userController.editProfilePost);
+router.post("/users/:userId/edit", upload.single("profilePicture"), userController.editProfilePost);
 
 module.exports = router;

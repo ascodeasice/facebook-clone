@@ -66,6 +66,7 @@ exports.getPostFeed = (req, res, next) => {
                 suggestedFriends: results.suggestedFriends,
             });
 
+
         }
     )
 }

@@ -7,7 +7,8 @@ block content
                 each friend in suggestedFriends 
                     div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
                         a(href=`/users/${friend._id}`)
-                            img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+                            include ./mixins/profilePicture.pug 
+                            +profilePicture(friend,"w-8 h-8 rounded-full mr-2 hover:scale-110")
                         a(href=`/users/${friend._id}` class='hover:text-blue-600 text-xl mr-2 font-medium  max-w-xs overflow-x-auto')=friend.username
                         //- Friend request button
                         form(action='/friendRequest/'+user._id+"/"+friend._id method="POST" )

@@ -7,8 +7,13 @@ html
     link(rel='icon' href='/faviconit/favicon.ico')
   body(class='min-h-screen')
     include ./components/header 
-    if user 
-      block content
+    if user
+      if error 
+        h1= message
+        h2= error.status
+        pre #{error.stack}
+      else 
+        block content
     else 
       div(class='grid grid-cols-1 grid-rows-2 gap-y-2 min-h-2 mt-5')
         a(href="/login/facebook" class='justify-self-center') 

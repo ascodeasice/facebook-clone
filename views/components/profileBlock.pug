@@ -1,6 +1,7 @@
 div(class='profileBlock flex justify-center items-center p-4 bg-gray-200 w-full rounded-md mt-4')
     a(href=`/users/${user._id}`)
-        img(src=user.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+        include ../mixins/profilePicture.pug 
+        +profilePicture(user,"w-8 h-8 rounded-full mr-2 hover:scale-110")
     a(href=`/users/${user._id}` class='hover:text-blue-600')
         h1(class='text-xl mr-2 font-medium')=user.username
     //- log out button 

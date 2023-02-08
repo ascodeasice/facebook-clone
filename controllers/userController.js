@@ -95,9 +95,6 @@ exports.editProfileGet = (req, res, next) => {
 }
 
 exports.editProfilePost = [
-    body("profilePictureURL", "Profile picture url is required")
-        .trim()
-        .isLength({ min: 1 }),
     body("username", "User name is required")
         .trim()
         .isLength({ min: 1 }),
@@ -119,7 +116,13 @@ exports.editProfilePost = [
             profilePictureURL: req.body.profilePictureURL,
             facebookId: res.locals.currentUser.facebookId,
             friends: res.locals.currentUser.friends,
+            profilePicture: req.file ? req.file.buffer : res.locals.currentUser.profilePicture,
         });
+        if (req.file) {
+            console.log(req.file.buffer)
+        } else {
+            console.log("No file uploaded");
+        }
 
         User.findByIdAndUpdate(res.locals.currentUser._id, newUser, (err, oldUser) => {
             if (err) {
@@ -128,7 +131,5 @@ exports.editProfilePost = [
             res.locals.currentUser = newUser;
         })
         res.redirect(`/users/${newUser._id}`);
-
-
     }
 ];

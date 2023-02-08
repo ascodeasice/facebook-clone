@@ -1,5 +1,6 @@
 extends layout 
-block content 
+block content
+  include ./mixins/profilePicture.pug 
   div(class='grid justify-center')
     include ./components/profileBlock
     div(class='grid justify-center')
@@ -9,7 +10,7 @@ block content
             each request in friendRequests 
                 div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
                     a(href=`/users/${request.from._id}`)
-                        img(src=request.from.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+                        +profilePicture(request.from,"w-8 h-8 rounded-full mr-2 hover:scale-110")
                     a(href=`/users/${request.from._id}` class='hover:text-blue-600')
                         h1(class='text-xl mr-2 font-medium')=request.from.username
                     //- Delete friend button
@@ -27,7 +28,7 @@ block content
             each friend in friends 
                 div(class='flex justify-between items-center p-4 bg-gray-200 w-full rounded-md mt-4')
                     a(href=`/users/${friend._id}`)
-                        img(src=friend.profilePictureURL alt="Profile picture" class="w-8 h-8 rounded-full mr-2 hover:scale-110")
+                        +profilePicture(friend,"w-8 h-8 rounded-full mr-2 hover:scale-110")
                     a(href=`/users/${friend._id}` class='hover:text-blue-600')
                         h1(class='text-xl mr-2 font-medium')=friend.username
                     //- Delete friend button

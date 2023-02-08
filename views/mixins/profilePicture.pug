@@ -1,0 +1,6 @@
+include ./bufferImage.pug 
+mixin profilePicture(user,classes)
+    if user.profilePicture 
+        +bufferImage(classes,user.profilePicture)
+    else 
+        img(src=user.profilePictureURL class=classes alt='profile picture of '+user.username)

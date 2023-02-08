@@ -8,7 +8,8 @@ block content
                 div(class='grid grid-cols-1')
                     div(class='flex items-start')
                         a(href=`/users/${comment.author._id}` class='mr-2 w-12 h-12 hover:scale-110 ')
-                            img(src=comment.author.profilePictureURL class='rounded-full ')
+                            include ./mixins/profilePicture.pug 
+                            +profilePicture(comment.author,"rounded-full w-8 h-8")                        
                         div(class='bg-gray-200 rounded-md w-full p-2  grid grid-cols-[1fr_min-content]')
                             a(href=`/users/${comment.author._id}` class='font-bold hover:text-blue-600')=comment.author.username
                             if comment.author._id.toString()==user._id
