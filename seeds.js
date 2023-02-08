@@ -14,51 +14,54 @@ async function main() {
     await mongoose.connect(mongoDB);
 }
 
-const USERS = [];
 
-function getFakeBio() {
-    return `Hello, my name is ${faker.name.firstName()}, I'm from ${faker.address.country()}
-I was born in ${DateTime.fromJSDate(faker.date.birthdate()).toFormat("yyyy/MM/dd")}.
-I like to ${faker.word.verb()} my ${faker.word.adjective()} ${faker.word.noun()} in my free time.
-My favorite thing is ${faker.commerce.product()}`;
-}
+// SECTION generate fake users
+// const USERS = [];
 
-function createRandomUser(fakeUserId) {
-    return {
-        facebookId: fakeUserId,
-        username: faker.internet.userName(),
-        profilePictureURL: faker.image.avatar(),
-        friends: [],
-        bio: getFakeBio(),
-    };
-}
+// function getFakeBio() {
+//     return `Hello, my name is ${faker.name.firstName()}, I'm from ${faker.address.country()}
+// I was born in ${DateTime.fromJSDate(faker.date.birthdate()).toFormat("yyyy/MM/dd")}.
+// I like to ${faker.word.verb()} my ${faker.word.adjective()} ${faker.word.noun()} in my free time.
+// My favorite thing is ${faker.commerce.product()}`;
+// }
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
+// function createRandomUser(fakeUserId) {
+//     return {
+//         facebookId: fakeUserId,
+//         username: faker.internet.userName(),
+//         profilePictureURL: faker.image.avatar(),
+//         friends: [],
+//         bio: getFakeBio(),
+//     };
+// }
 
-for (let i = 0; i < 10; i++) {
-    USERS.push(createRandomUser("fakeUserId" + i));
-}
+// function getRandomInt(max) {
+//     return Math.floor(Math.random() * max);
+// }
 
-const fakeData = USERS.map((user) => new User(user));
+// for (let i = 0; i < 10; i++) {
+//     USERS.push(createRandomUser("fakeUserId" + i));
+// }
 
-// make them friends randomly
-for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 3; j++) {
-        let randomNum = getRandomInt(10);
-        if (fakeData[i].friends.includes(fakeData[randomNum]._id) || randomNum == i) {
-            continue;
-        }
-        fakeData[i].friends.push(fakeData[randomNum]._id);
-        fakeData[randomNum].friends.push(fakeData[i]._id);
-    }
-}
+// const fakeData = USERS.map((user) => new User(user));
 
-fakeData.forEach((data) => {
-    data.save()
-        .catch(err => {
-            console.log(err);
-        });
-})
+// // make them friends randomly
+// for (let i = 0; i < 10; i++) {
+//     for (let j = 0; j < 3; j++) {
+//         let randomNum = getRandomInt(10);
+//         if (fakeData[i].friends.includes(fakeData[randomNum]._id) || randomNum == i) {
+//             continue;
+//         }
+//         fakeData[i].friends.push(fakeData[randomNum]._id);
+//         fakeData[randomNum].friends.push(fakeData[i]._id);
+//     }
+// }
 
+// fakeData.forEach((data) => {
+//     data.save()
+//         .catch(err => {
+//             console.log(err);
+//         });
+// })
+
+// SECTION generate fake posts

@@ -9,8 +9,11 @@ block content
             a(href=`/users/${user._id}` class='hover:text-blue-600')
                 h1(class='text-xl mr-2 font-medium')=user.username
         div(class='grid grid-cols-1 justify-center items-center w-full mt-4')
-            form(action="" method="POST" class='flex flex-col justify-center')
-                textarea(name='text' class='bg-gray-200 rounded w-[30rem] h-96 p-4 resize-none overflow-y-auto')
+            form(action="" method="POST" class='flex flex-col justify-center' enctype='multipart/form-data')
+                label(for='text' class='font-bold text-3xl mb-2') Text
+                textarea(id='text' name='text' class='bg-gray-200 rounded w-[30rem] h-96 p-4 resize-none overflow-y-auto')
+                label(for='images' class='font-bold text-3xl mb-2') Images(Optional)
+                input(type='file' name='images' id='images' multiple='multiple' class='bg-gray-200 rounded  p-4' accept=".png, .jpg, .jpeg")
                 input(type='hidden' name="author" value=user._id)
                 button(type='submit' class='bg-blue-600 w-full text-white font-bold mt-4 rounded-md h-12') Post
             if errors 

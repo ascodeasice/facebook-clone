@@ -2,6 +2,7 @@ const User = require("../models/User");
 const async = require("async");
 const Post = require("../models/Post");
 const { body, validationResult } = require("express-validator");
+const sharp = require("sharp");
 
 exports.getUsers = (req, res, next) => {
     const allFriends = res.locals.currentUser.friends;
@@ -99,7 +100,7 @@ exports.editProfilePost = [
         .trim()
         .isLength({ min: 1 }),
     // bio can be empty
-    (req, res, next) => {
+    async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.render("profileForm", {
@@ -109,6 +110,14 @@ exports.editProfilePost = [
             });
             return;
         }
+
+        // resize the image and turn to png if image is uploaded
+        const buffer = req.file ? await sharp(req.file.buffer)
+            .resize({ width: 50, height: 50 })
+            .png()
+            .toBuffer()
+            : res.locals.currentUser.profilePicture;
+
         const newUser = new User({
             _id: res.locals.currentUser._id,
             username: req.body.username,
@@ -116,13 +125,8 @@ exports.editProfilePost = [
             profilePictureURL: req.body.profilePictureURL,
             facebookId: res.locals.currentUser.facebookId,
             friends: res.locals.currentUser.friends,
-            profilePicture: req.file ? req.file.buffer : res.locals.currentUser.profilePicture,
+            profilePicture: buffer,
         });
-        if (req.file) {
-            console.log(req.file.buffer)
-        } else {
-            console.log("No file uploaded");
-        }
 
         User.findByIdAndUpdate(res.locals.currentUser._id, newUser, (err, oldUser) => {
             if (err) {

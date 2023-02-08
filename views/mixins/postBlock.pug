@@ -1,5 +1,6 @@
 mixin postBlock(post)
     include ./profilePicture.pug 
+    include ./bufferImage.pug 
     div(class='grid shadow-md border border-gray-400 rounded-lg p-4')
         div(class='grid grid-cols-[2rem_1fr_min-content] grid-rows-[min-content_min-content] gap-x-2 items-center')
             //- owner of 
@@ -19,7 +20,11 @@ mixin postBlock(post)
         p(class='whitespace-pre-line max-h-96 overflow-y-auto')=post.text
         hr(class='h-0 bg-gray-400 mt-4')
         //- like count
-        //-TODO: when hovering like count, it shows who liked this post
+        //- TODO: when hovering like count, it shows who liked this post
+        if post.images
+            div(class='grid gap-y-2 max-h-96 overflow-y-auto mt-2')
+                each image in post.images 
+                    +bufferImage("w-full h-fit mb-2",image)
         div(class='flex justify-between mt-2')
             if post.peopleLiked.length 
                 div(class='flex ml-2')
@@ -30,7 +35,6 @@ mixin postBlock(post)
                     a(href=`/posts/${post._id}` class="rounded-full bg-gray-200 mr-1 p-1 w-fit")
                         img(src="/images/comment.svg"  class='w-4  h-4  bg-gray-200 ')
                     p=post.comments.length
-        //- TODO: put image of post here
         div(class='flex mt-1')
             form(action=`/posts/${post._id}/like/${user._id}` method="POST" class='flex items-center w-full hover:bg-gray-200 p-2 rounded')
                 //- An submit button that looks like image

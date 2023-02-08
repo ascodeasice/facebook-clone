@@ -6,6 +6,7 @@ const postController = require("../controllers/postController");
 const friendController = require("../controllers/friendController");
 const userController = require("../controllers/userController");
 const upload = require("../multer/upload");
+const postUpload = require("../multer/postUpload");
 
 /* GET home page. */
 router.get('/', postController.getPostFeed);
@@ -27,7 +28,7 @@ router.post("/friendRequest/:userId1/:userId2", friendController.sendFriendReque
 
 router.get("/posts/create", postController.createPostGet)
 
-router.post("/posts/create", postController.createPostPost)
+router.post("/posts/create", postUpload.array("images"), postController.createPostPost)
 
 router.get("/users", userController.getUsers);
 

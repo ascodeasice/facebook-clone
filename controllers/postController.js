@@ -85,6 +85,14 @@ exports.createPostPost = [
     body("author", "Author is required")
         .trim()
         .isLength({ min: 1 }),
+    body("images")
+        .custom((value, { req }) => {
+            if (req.files && req.files.length > 10) {
+                return false;
+            }
+            return true;
+        })
+        .withMessage("You can post 10 images at most"),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -93,12 +101,14 @@ exports.createPostPost = [
                 user: res.locals.currentUser,
                 errors: errors.array(),
             });
+            return;
         }
         const newPost = new Post({
             author: req.body.author,
             peopleLiked: [],
             text: req.body.text,
             comments: [],
+            images: !req.files ? [] : req.files.map((file) => file.buffer)
         });
         newPost.save(err => {
             if (err) {

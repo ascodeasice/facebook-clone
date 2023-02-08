@@ -7,6 +7,7 @@ const PostSchema = new Schema({
     peopleLiked: [{ type: Schema.Types.ObjectId, ref: "User" }],
     author: { type: Schema.Types.ObjectId, ref: "User" },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    images: [{ type: Buffer }],
 },
     {
         timestamps: true,
